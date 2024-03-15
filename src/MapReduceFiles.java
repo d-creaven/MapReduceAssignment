@@ -214,9 +214,14 @@ public class MapReduceFiles {
     }
 
     public static void map(String file, String contents, List<MappedItem> mappedItems) {
-        String[] words = contents.trim().split("\\s+");
-        for(String word: words) {
-            mappedItems.add(new MappedItem(word, file));
+        // Split the contents into words using a regular expression that matches word characters
+        // This regex will split the string into words and exclude punctuation and numbers
+        String[] words = contents.trim().split("[^a-zA-Z]+");
+        for(String word : words) {
+            // Ignore empty strings that might result from split operation
+            if (!word.isEmpty()) {
+                mappedItems.add(new MappedItem(word, file));
+            }
         }
     }
 
@@ -239,10 +244,15 @@ public class MapReduceFiles {
     }
 
     public static void map(String file, String contents, MapCallback<String, MappedItem> callback) {
-        String[] words = contents.trim().split("\\s+");
+        // Split the contents into words using a regular expression that matches word characters
+        // This regex will split the string into words and exclude punctuation and numbers
+        String[] words = contents.trim().split("[^a-zA-Z]+");
         List<MappedItem> results = new ArrayList<MappedItem>(words.length);
-        for(String word: words) {
-            results.add(new MappedItem(word, file));
+        for(String word : words) {
+            // Ignore empty strings that might result from split operation
+            if (!word.isEmpty()) {
+                results.add(new MappedItem(word, file));
+            }
         }
         callback.mapDone(file, results);
     }
