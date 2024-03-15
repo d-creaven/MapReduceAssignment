@@ -166,15 +166,35 @@ public class MapReduceFiles {
                 }
             }
 
-            // REDUCE:
-            final Map<String, Map<String, Integer>> reducedResults = new HashMap<>();
-            final ReduceCallback<String, String, Integer> reduceCallback = (k, v) -> reducedResults.put(k, v);
 
-            groupedItems.forEach((word, list) -> reduce(word, list, reduceCallback));
+            // REDUCE:
+            ExecutorService reduceExecutor = Executors.newFixedThreadPool(numberOfThreads); // Reuse the number of threads
+            final ReduceCallback<String, String, Integer> reduceCallback = (k, v) -> {
+                synchronized(output) {
+                    output.put(k, v);
+                }
+            };
+
+            // Submit reduce tasks to the thread pool
+            for (Map.Entry<String, List<String>> entry : groupedItems.entrySet()) {
+                String word = entry.getKey();
+                List<String> list = entry.getValue();
+
+                reduceExecutor.submit(() -> reduce(word, list, reduceCallback));
+            }
+
+            // Shutdown the executor and await termination of reduce tasks
+            reduceExecutor.shutdown();
+            try {
+                reduceExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
 
             long endTimeApproach3 = System.currentTimeMillis();
             System.out.println("Approach #3: Distributed MapReduce took " + (endTimeApproach3 - startTimeApproach3) + " milliseconds.");
-            System.out.println(reducedResults);
+            System.out.println(output);
         }
     }
 

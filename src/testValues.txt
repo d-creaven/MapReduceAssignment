@@ -2,3 +2,9 @@ First Run for step 3:
 Approach #1: Brute Force took 137 milliseconds.
 Approach #2: MapReduce took 175 milliseconds.
 Approach #3: Distributed MapReduce took 330 milliseconds.
+
+Second Run for step 4 (4 threads):
+Approach #1: Brute Force took 126 milliseconds.
+Approach #2: MapReduce took 166 milliseconds.
+Approach #3: Distributed MapReduce took 173 milliseconds.
+
