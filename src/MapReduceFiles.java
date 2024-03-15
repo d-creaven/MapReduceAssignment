@@ -11,17 +11,20 @@ public class MapReduceFiles {
 
     public static void main(String[] args) {
 
-        if (args.length < 2) { // At least one thread count and one filename is required
-            System.err.println("Usage: java MapReduceFiles <number-of-threads> <file1.txt> <file2.txt> <file3.txt> ...");
+        if (args.length < 3) { // Check if at least two thread counts and one filename is provided
+            System.err.println("Usage: java MapReduceFiles <map-thread-pool-size> <reduce-thread-pool-size> <file1.txt> <file2.txt> ...");
             System.exit(1);
         }
 
-        int numberOfThreads;
+        int mapThreadPoolSize, reduceThreadPoolSize;
         try {
-            numberOfThreads = Integer.parseInt(args[0]); // The first argument is the number of threads in the pool
-            if (numberOfThreads <= 0) throw new NumberFormatException("Number of threads must be positive");
+            mapThreadPoolSize = Integer.parseInt(args[0]); // The first argument is the map thread pool size
+            reduceThreadPoolSize = Integer.parseInt(args[1]); // The second argument is the reduce thread pool size
+            if (mapThreadPoolSize <= 0 || reduceThreadPoolSize <= 0) {
+                throw new NumberFormatException("Number of threads must be positive");
+            }
         } catch (NumberFormatException e) {
-            System.err.println("First argument must be an integer representing the number of threads.");
+            System.err.println("First and second arguments must be integers representing the map and reduce thread pool sizes respectively.");
             e.printStackTrace();
             System.exit(1);
             return;
@@ -141,7 +144,7 @@ public class MapReduceFiles {
             final List<MappedItem> mappedItems = Collections.synchronizedList(new LinkedList<>()); // Thread-safe list
             final MapCallback<String, MappedItem> mapCallback = (file, results) -> mappedItems.addAll(results);
 
-            ExecutorService mapExecutor = Executors.newFixedThreadPool(numberOfThreads);
+            ExecutorService mapExecutor = Executors.newFixedThreadPool(mapThreadPoolSize);
 
             for (String file : filesToProcess) {
                 String contents = input.get(file);
@@ -168,7 +171,7 @@ public class MapReduceFiles {
 
 
             // REDUCE:
-            ExecutorService reduceExecutor = Executors.newFixedThreadPool(numberOfThreads); // Reuse the number of threads
+            ExecutorService reduceExecutor = Executors.newFixedThreadPool(reduceThreadPoolSize);
             final ReduceCallback<String, String, Integer> reduceCallback = (k, v) -> {
                 synchronized(output) {
                     output.put(k, v);
