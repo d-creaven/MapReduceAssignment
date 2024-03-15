@@ -33,6 +33,7 @@ public class MapReduceFiles {
 
         // APPROACH #1: Brute force
         {
+            long startTimeApproach1 = System.currentTimeMillis();
             Map<String, Map<String, Integer>> output = new HashMap<String, Map<String, Integer>>();
 
             Iterator<Map.Entry<String, String>> inputIter = input.entrySet().iterator();
@@ -61,12 +62,16 @@ public class MapReduceFiles {
             }
 
             // show me:
+            long endTimeApproach1 = System.currentTimeMillis();
+            System.out.println("Approach #1: Brute Force took " + (endTimeApproach1 - startTimeApproach1) + " milliseconds.");
             System.out.println(output);
+
         }
 
 
         // APPROACH #2: MapReduce
         {
+            long startTimeApproach2 = System.currentTimeMillis();
             Map<String, Map<String, Integer>> output = new HashMap<String, Map<String, Integer>>();
 
             // MAP:
@@ -110,12 +115,15 @@ public class MapReduceFiles {
                 reduce(word, list, output);
             }
 
+            long endTimeApproach2 = System.currentTimeMillis();
+            System.out.println("Approach #2: MapReduce took " + (endTimeApproach2 - startTimeApproach2) + " milliseconds.");
             System.out.println(output);
         }
 
 
         // APPROACH #3: Distributed MapReduce
         {
+            long startTimeApproach3 = System.currentTimeMillis();
             final Map<String, Map<String, Integer>> output = new HashMap<String, Map<String, Integer>>();
 
             // MAP:
@@ -209,6 +217,8 @@ public class MapReduceFiles {
                 }
             }
 
+            long endTimeApproach3 = System.currentTimeMillis();
+            System.out.println("Approach #3: Distributed MapReduce took " + (endTimeApproach3 - startTimeApproach3) + " milliseconds.");
             System.out.println(output);
         }
     }
