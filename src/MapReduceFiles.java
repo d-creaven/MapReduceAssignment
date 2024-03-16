@@ -32,8 +32,8 @@ public class MapReduceFiles {
 
         Map<String, String> input = new HashMap<String, String>();
 
-        // Iterate over all provided file names (starting from the second argument) and read each file
-        for (int i = 1; i < args.length; i++) { // Start from 1 to skip thread count
+        // Iterate over all provided file names (starting from the third argument) and read each file
+        for (int i = 2; i < args.length; i++) { // Start from 2 to skip thread count
             String filename = args[i];
             try {
                 input.put(filename, readFile(filename));

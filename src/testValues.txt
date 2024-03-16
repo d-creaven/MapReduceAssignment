@@ -13,3 +13,14 @@ Approach #3: Distributed MapReduce took 290 milliseconds.
 ------------
 
 Step 6 Results (X Map & Reduce Threads)
+(6M + 6R)
+Approach #3: Distributed MapReduce took 183 milliseconds.
+(12M + 12R)
+Approach #3: Distributed MapReduce took 112 milliseconds.
+(24M + 24R)
+Approach #3: Distributed MapReduce took 151 milliseconds.
+(12M + 6R)
+Approach #3: Distributed MapReduce took 136 milliseconds.
+(6M + 12R)
+Approach #3: Distributed MapReduce took 168 milliseconds.
+
