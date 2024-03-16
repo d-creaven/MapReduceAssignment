@@ -32,7 +32,6 @@ public class MapReduceFiles {
 
         Map<String, String> input = new HashMap<String, String>();
 
-        // Iterate over all provided file names (starting from the third argument) and read each file
         for (int i = 2; i < args.length; i++) { // Start from 2 to skip thread count
             String filename = args[i];
             try {
@@ -79,7 +78,6 @@ public class MapReduceFiles {
             System.out.println(output);
 
         }
-
 
         // APPROACH #2: MapReduce
         {
@@ -133,7 +131,7 @@ public class MapReduceFiles {
         }
 
 
-        List<String> filesToProcess = Arrays.asList(Arrays.copyOfRange(args, 1, args.length)); // Skip the first arg for file names
+        List<String> filesToProcess = Arrays.asList(Arrays.copyOfRange(args, 1, args.length));
 
         // APPROACH #3: Distributed MapReduce
         {
